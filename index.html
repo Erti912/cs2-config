@@ -236,15 +236,38 @@ h1::after{
     <div class="container">
         <p>1. Editimi Manual & Shkarkimi</p>
         <textarea id="configText">// =============================================
-//          -ExarVok- CS2 AUTOEXEC CONFIG - FINAL
+//          -ExarVok- CS2 AUTOEXEC CONFIG
 // =============================================
 
-// [SENSITIVITY]
+// [SENSITIVITY & MOUSE]
 sensitivity "2.7"
 zoom_sensitivity_ratio_mouse "1.50"
 
 // [CROSSHAIR]
 apply_crosshair_code "CSGO-Xdb9Y-S6FLD-3csCx-Fo82T-33LsE"
+
+// [AUDIO - MASTER & DEVICES]
+volume "1.00"
+snd_voipvolume "0.60"
+snd_headphone_eq "0" // EQ Profile: Natural
+snd_spatialize_lerp "0.0" // L/R Isolation: 0%
+snd_steamaudio_perspective_correct "1" // Perspective Correction: YES
+snd_mute_losefocus "1" // Play Audio When Game In Background: NO
+
+// [AUDIO - MUSIC SETTINGS]
+snd_menumusic_volume "0.00"
+snd_roundstart_volume "0.00"
+snd_roundaction_volume "0.00"
+snd_roundend_volume "0.00"
+snd_mvp_volume "0.00"
+snd_mapobjective_volume "0.00"
+snd_tensecondwarning_volume "0.09" // 9% Volume
+snd_deathcamera_volume "0.00"
+
+// [DAMAGE PREDICTION - ALL OFF]
+cl_predict_body_shot_fx "0"
+cl_predict_head_shot_fx "0"
+cl_predict_kill_ragdolls "0"
 
 // [VIEWMODEL & HUD]
 viewmodel_fov "60"
@@ -252,74 +275,36 @@ viewmodel_offset_x "1"
 viewmodel_offset_y "1"
 viewmodel_offset_z "-1.5"
 cl_viewmodel_presetpos "1"
-safezonex "0.9"
-safezoney "0.9"
 hud_scaling "0.90"
-cl_hud_color "4"
-cl_hud_playercount_showcount "1"
-cl_spec_override_hud_color "1"
+cl_hud_color "4" // Yellow
 
 // [RADAR]
 cl_radar_scale "0.30"
 cl_hud_radar_scale "1.07"
-cl_radar_bg_opacity "0.50"
-cl_radar_map_zoom "1.00"
-cl_radar_icon_scale_min "0.6"
 cl_radar_always_centered "0"
 cl_radar_rotate "1"
 
-// [AUDIO - MAIN & VOICE]
-volume "1.00"
-snd_voipvolume "0.60"
-snd_headphone_eq "0"
-snd_spatialize_lerp "0.0"
-snd_steamaudio_perspective_correct "1"
-snd_mute_losefocus "1"
-
-// [AUDIO - MUSIC SETTINGS]
-snd_menumusic_volume "1.00"
-snd_roundstart_volume "0.00"
-snd_roundaction_volume "0.00"
-snd_roundend_volume "0.00"
-snd_mvp_volume "0.00"
-snd_mapobjective_volume "0.00"
-snd_tensecondwarning_volume "0.09"
-snd_deathcamera_volume "0.00"
-snd_mute_mvp_music_live_players "0"
-
-// [DAMAGE PREDICTION]
-cl_predict_body_shot_fx "0"
-cl_predict_head_shot_fx "0"
-cl_predict_kill_ragdolls "0"
-
-// [BINDS]
+// [BINDS & ALIASES]
 bind "MWHEELUP" "+jump"
 bind "MWHEELDOWN" "+lookatweapon"
-bind "MOUSE5" "slot7"
-bind "MOUSE4" "slot8"
-bind "c" "slot6"
+bind "MOUSE5" "slot7" // Flashbang
+bind "MOUSE4" "slot8" // Smoke
+bind "c" "slot6" // HE Grenade
 bind "v" "switchhands"
 bind "CAPSLOCK" "+voicerecord"
-bind "F2" "cl_righthand 1"
-bind "F3" "cl_righthand 0"
-bind "F9" "noclip"
-bind "SHIFT" "+sprint;r_cleardecals"
-bind "CTRL" "+duck;r_cleardecals"
 
-// [JUMPTHROW ALIAS]
+// JUMPTHROW BIND
 alias "+jt" "+jump"
 alias "-jt" "-jump"
 alias "+ta" "-attack; -attack2"
 bind "mouse3" "+jt; +ta"
 
 // [PERFORMANCE]
-rate "786432"
-cl_interp "0"
-cl_interp_ratio "1"
 fps_max "400"
+rate "786432"
 
 host_writeconfig
-echo "-ExarVok-'S CONFIG LOADED!"</textarea>
+echo "-ExarVok- CONFIG LOADED SUCCESSFULLY!"</textarea>
 
         <div class="buttons">
             <button class="btn-download" onclick="downloadConfig()">Shkarko autoexec.cfg</button>
