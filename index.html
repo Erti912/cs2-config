@@ -1,16 +1,21 @@
-<footer class="footer">
-    <p>&copy; <span id="currentYear"></span> Your Company Name</p>
-</footer>
-<script>
-    document.getElementById("currentYear").textContent = new Date().getFullYear();
-</script>
-<style>
-.footer {
-    background-color: #f8f9fa;
-    text-align: center;
-    padding: 20px;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-}
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+</head>
+<body>
+    <!-- Restore full page content from commit d6af21e795c9ed07f0bc032ad2204688022d3869 -->
+    <h1>Welcome to Your Page!</h1>
+    <p>This is a restored content paragraph.</p>
+    <script>
+        const year = new Date().getFullYear();
+        document.addEventListener('DOMContentLoaded', function() {
+            const footer = document.createElement('footer');
+            footer.innerHTML = `&copy; ${year} - ExarVok - <a href='https://github.com/Erti912'>GitHub</a>`;
+            document.body.appendChild(footer);
+        });
+    </script>
+</body>
+</html>
