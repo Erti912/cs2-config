@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>-ExarVok- CS2 Config Manager</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root{
+      --bg0:#050505;
+      --bg1:#0b0b0b;
+      --card:#121212cc;
+      --card2:#161616;
+      --border:#232323;
+      --text:#f5f5f5;
+      --muted:#a8a8a8;
+      --accent:#ffcc00;
+      --accent2:#00d4ff;
+      --green:#00ff41;
+      --shadow: 0 20px 60px rgba(0,0,0,.55);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(255,204,0,.16), transparent 60%),
+        radial-gradient(900px 500px at 85% 15%, rgba(0,212,255,.16), transparent 55%),
+        radial-gradient(900px 500px at 60% 90%, rgba(0,255,65,.09), transparent 55%),
+        conic-gradient(from 180deg at 50% 50%, rgba(255,255,255,.02), rgba(255,255,255,0) 30%, rgba(255,255,255,.018) 55%, rgba(255,255,255,0) 80%, rgba(255,255,255,.015)),
+        linear-gradient(180deg, var(--bg1), var(--bg0));
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:48px 16px 64px;
+      overflow-x:hidden;
+    }
+
+    /* animated background grid */
+    .bg-grid{
+      position:fixed;
+      inset:-30% -30% -30% -30%;
+      background:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      transform: rotate(-10deg);
+      filter: blur(.2px);
+      opacity:.35;
+      animation: gridMove 18s linear infinite;
+      pointer-events:none;
+      z-index:-2;
+    }
+    @keyframes gridMove{
+      from{ transform: translate3d(-2%, -2%, 0) rotate(-10deg); }
+      to{ transform: translate3d(2%, 2%, 0) rotate(-10deg); }
+    }
+
+    /* floating glow blobs */
+    .blob{
+      position:fixed;
+      width:520px;
+      height:520px;
+      border-radius:999px;
+      filter: blur(50px);
+      opacity:.18;
+      z-index:-3;
+      pointer-events:none;
+      animation: floaty 10s ease-in-out infinite;
+    }
+    .blob.a{ left:-120px; top:-140px; background: var(--accent); }
+    .blob.b{ right:-140px; top:-120px; background: var(--accent2); animation-delay:-3s; }
+    .blob.c{ left:20%; bottom:-220px; background: var(--green); animation-delay:-6s; }
+    @keyframes floaty{
+      0%,100%{ transform: translateY(0) translateX(0) scale(1); }
+      50%{ transform: translateY(30px) translateX(18px) scale(1.05); }
+    }
+
+    .shell{
+      width:min(980px, 100%);
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      animation: enter 700ms cubic-bezier(.2,.8,.2,1) both;
+    }
+    @keyframes enter{
+      from{ opacity:0; transform: translateY(14px); }
+      to{ opacity:1; transform: translateY(0); }
+    }
+
+    header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      padding:18px 20px;
+      border:1px solid #2c2c2c;
+      border-radius:18px;
+      background: linear-gradient(180deg, rgba(25,25,25,.78), rgba(12,12,12,.55));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      position:relative;
+      overflow:hidden;
+    }
+
+    header::after{
+      content:"";
+      position:absolute;
+      left:0;
+      top:0;
+      height:2px;
+      width:100%;
+      background: linear-gradient(90deg, rgba(255,204,0,.75), rgba(0,212,255,.75));
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    h1{
+      margin:0;
+      font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+      letter-spacing: .8px;
+      color: var(--accent);
+      text-shadow: 0 0 18px rgba(255,204,0,.18);
+      line-height:1.05;
+    }
+
+    .brand-kicker{
+      margin:0;
+      text-transform: uppercase;
+      letter-spacing: 1.6px;
+      font-size: 11px;
+      font-weight: 700;
+      color:#d7d7d7;
+      opacity:.82;
+    }
+
+    .subtitle{
+      margin:0;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:flex-end;
+    }
+
+    .chip{
+      border:1px solid var(--border);
+      background: rgba(0,0,0,.25);
+      color:#d9d9d9;
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:12px;
+      letter-spacing:.2px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+
+    .dot{ width:8px; height:8px; border-radius:999px; background: var(--accent2); box-shadow: 0 0 16px rgba(0,212,255,.35); }
+
+    .container{
+      border:1px solid var(--border);
+      border-radius:18px;
+      background: linear-gradient(180deg, rgba(22,22,22,.72), rgba(10,10,10,.55));
+      box-shadow: var(--shadow);
+      padding:18px;
+      backdrop-filter: blur(10px);
+      position:relative;
+      overflow:hidden;
+      transition: transform .25s ease, border-color .25s ease;
+    }
+
+    .container:hover{
+      transform: translateY(-2px);
+      border-color:#2f2f2f;
+    }
+
+    .container::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(700px 220px at 15% 0%, rgba(255,204,0,.12), transparent 55%);
+      pointer-events:none;
+    }
+
+    .quick-grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:12px;
+    }
+
+    .quick-card{
+      border:1px solid #2a2a2a;
+      border-radius:14px;
+      padding:12px;
+      background: linear-gradient(180deg, rgba(17,17,17,.84), rgba(11,11,11,.72));
+    }
+
+    .quick-label{
+      margin:0;
+      color:#a3a3a3;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .quick-value{
+      margin:6px 0 0;
+      font-size: 15px;
+      font-weight: 700;
+      color:#ebebeb;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin:0 0 12px 0;
+      padding:2px 2px 0;
+    }
+    .section-title p{
+      margin:0;
+      color:#d7d7d7;
+      font-weight:800;
+      letter-spacing:.3px;
+    }
+
+    .hint{
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .editor-wrap{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+
+    textarea{
+      width:100%;
+      height:420px;
+      background: linear-gradient(180deg, rgba(5,5,5,.82), rgba(0,0,0,.66));
+      color: var(--green);
+      border:1px solid #2c2c2c;
+      padding:16px;
+      font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+      font-size: 13px;
+      border-radius:14px;
+      line-height: 1.55;
+      outline:none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+
+    textarea:focus{
+      border-color: rgba(255,204,0,.65);
+      box-shadow: 0 0 0 4px rgba(255,204,0,.12);
+      transform: translateY(-1px);
+    }
+
+    .buttons{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top: 6px;
+    }
+
+    button{
+      flex:1;
+      min-width: 220px;
+      padding: 14px 14px;
+      font-weight: 900;
+      font-size: 12.5px;
+      text-transform: uppercase;
+      letter-spacing:.6px;
+      border-radius: 14px;
+      cursor:pointer;
+      border: 1px solid rgba(255,255,255,.06);
+      transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
+      position:relative;
+      overflow:hidden;
+    }
+
+    button::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.22) 45%, transparent 70%);
+      transform: translateX(-120%);
+      transition: transform .6s ease;
+      pointer-events:none;
+    }
+
+    button:hover::after{ transform: translateX(120%); }
+    button:hover{ transform: translateY(-2px); filter: brightness(1.05); }
+    button:active{ transform: translateY(0px) scale(.99); }
+
+    .btn-download{ background: linear-gradient(135deg, #ffd633, #ffb300); color:#0b0b0b; box-shadow: 0 12px 30px rgba(255,204,0,.14); }
+    .btn-copy{ background: linear-gradient(135deg, #2e2e2e, #1a1a1a); color:#fff; }
+    .btn-ps{ background: linear-gradient(135deg, #2b88d8, #0078d4); color:#fff; box-shadow: 0 12px 30px rgba(0,120,212,.14); }
+
+    .terminal-box{
+      background: rgba(0,0,0,.55);
+      border: 1px solid #2c2c2c;
+      border-radius: 14px;
+      padding: 14px;
+      position: relative;
+      overflow:hidden;
+    }
+
+    .terminal-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding-bottom:10px;
+      margin-bottom:10px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    .traffic{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .traffic span{ width:10px; height:10px; border-radius:999px; display:inline-block; }
+    .traffic .r{ background:#ff5f56; }
+    .traffic .y{ background:#ffbd2e; }
+    .traffic .g{ background:#27c93f; }
+
+    .terminal-header{
+      color: #9a9a9a;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 800;
+      opacity:.9;
+    }
+
+    .terminal-code{
+      color: var(--accent2);
+      font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+      font-size: 12px;
+      word-break: break-word;
+      white-space: pre-wrap;
+      line-height: 1.45;
+    }
+
+    .info{
+      margin-top: 8px;
+      font-size: 13px;
+      color: #a1a1a1;
+      text-align: center;
+      font-weight: 650;
+    }
+
+    strong{ color: var(--accent); }
+
+    /* toast */
+    .toast{
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffd633;
+      color: #111;
+      border: 1px solid #ffbf00;
+      border-radius: 999px;
+      padding: 10px 14px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity .2s ease, transform .2s ease;
+      font-weight: 700;
+      font-size: 13px;
+      z-index: 50;
+    }
+    .toast.show{ opacity: 1; transform: translateX(-50%) translateY(6px); }
+
+    .footer-note{
+      margin-top:12px;
+      color:#8f8f8f;
+      font-size:12px;
+      text-align:center;
+      letter-spacing:.2px;
+    }
+
+    @media (max-width: 860px){
+      header{
+        flex-direction:column;
+      }
+
+      .chips{
+        justify-content:flex-start;
+      }
+
+      .quick-grid{
+        grid-template-columns: 1fr;
+      }
+
+      .buttons button{
+        min-width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .bg-grid, .blob, .shell{ animation: none !important; }
+      button, textarea{ transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="blob a"></div>
+  <div class="blob b"></div>
+  <div class="blob c"></div>
+
+  <main class="shell">
+    <header>
+      <div class="brand">
+        <p class="brand-kicker">Competitive Setup Panel</p>
+        <h1>-ExarVok- CS2 CONFIG</h1>
+        <p class="subtitle">Config Manager • Edito, kopjo dhe instalo shpejt</p>
+      </div>
+      <div class="chips" aria-hidden="true">
+        <div class="chip"><span class="dot"></span> Neon UI</div>
+        <div class="chip">Animations</div>
+        <div class="chip">Fast Install</div>
+      </div>
+    </header>
+
+    <section class="quick-grid" aria-label="Highlights">
+      <article class="quick-card">
+        <p class="quick-label">Workflow</p>
+        <p class="quick-value">Edit -> Download -> Ready</p>
+      </article>
+      <article class="quick-card">
+        <p class="quick-label">Mode</p>
+        <p class="quick-value">Manual ose PowerShell</p>
+      </article>
+      <article class="quick-card">
+        <p class="quick-label">Target</p>
+        <p class="quick-value">CS2 autoexec.cfg</p>
+      </article>
+    </section>
+
+    <section class="container">
+      <div class="section-title">
+        <p> Editimi Manual & Shkarkimi</p>
+        <span class="hint">Tip: Ctrl+F brenda editor-it</span>
+      </div>
+
+      <div class="editor-wrap">
+        <textarea id="configText">// =============================================
+//          -ExarVok- CS2 AUTOEXEC CONFIG - FINAL
+// =============================================
+
+// [SENSITIVITY]
+sensitivity "2.7"
+zoom_sensitivity_ratio_mouse "1.50"
+
+// [CROSSHAIR]
+apply_crosshair_code "CSGO-Xdb9Y-S6FLD-3csCx-Fo82T-33LsE"
+
+// [VIEWMODEL & HUD]
+viewmodel_fov "60"
+viewmodel_offset_x "1"
+viewmodel_offset_y "1"
+viewmodel_offset_z "-1.5"
+cl_viewmodel_presetpos "1"
+safezonex "0.9"
+safezoney "0.9"
+hud_scaling "0.90"
+cl_hud_color "4"
+cl_hud_playercount_showcount "1"
+cl_spec_override_hud_color "1"
+
+// [RADAR]
+cl_radar_scale "0.30"
+cl_hud_radar_scale "1.07"
+cl_radar_bg_opacity "0.50"
+cl_radar_map_zoom "1.00"
+cl_radar_icon_scale_min "0.6"
+cl_radar_always_centered "0"
+cl_radar_rotate "1"
+
+// [AUDIO - MAIN & VOICE]
+volume "1.00"
+snd_voipvolume "0.60"
+snd_headphone_eq "0"
+snd_spatialize_lerp "0.0"
+snd_steamaudio_perspective_correct "1"
+snd_mute_losefocus "1"
+
+// [AUDIO - MUSIC SETTINGS]
+snd_menumusic_volume "1.00"
+snd_roundstart_volume "0.00"
+snd_roundaction_volume "0.00"
+snd_roundend_volume "0.00"
+snd_mvp_volume "0.00"
+snd_mapobjective_volume "0.00"
+snd_tensecondwarning_volume "0.09"
+snd_deathcamera_volume "0.00"
+snd_mute_mvp_music_live_players "0"
+
+// [DAMAGE PREDICTION]
+cl_predict_body_shot_fx "0"
+cl_predict_head_shot_fx "0"
+cl_predict_kill_ragdolls "0"
+
+// [BINDS]
+bind "MWHEELUP" "+jump"
+bind "MWHEELDOWN" "+lookatweapon"
+bind "MOUSE5" "slot7"
+bind "MOUSE4" "slot8"
+bind "c" "slot6"
+bind "v" "switchhands"
+bind "CAPSLOCK" "+voicerecord"
+bind "F2" "cl_righthand 1"
+bind "F3" "cl_righthand 0"
+bind "F9" "noclip"
+bind "SHIFT" "+sprint;r_cleardecals"
+bind "CTRL" "+duck;r_cleardecals"
+
+// [JUMPTHROW ALIAS]
+alias "+jt" "+jump"
+alias "-jt" "-jump"
+alias "+ta" "-attack; -attack2"
+bind "mouse3" "+jt; +ta"
+
+// [PERFORMANCE]
+rate "786432"
+cl_interp "0"
+cl_interp_ratio "1"
+fps_max "400"
+
+host_writeconfig
+echo "-ExarVok-'S CONFIG LOADED!"</textarea>
+
+        <div class="buttons">
+          <button class="btn-download" onclick="downloadConfig()">Shkarko autoexec.cfg</button>
+          <button class="btn-copy" onclick="copyToClipboard()">Copy for Console</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="section-title">
+        <p> PowerShell Automation (Fast Install)</p>
+        <span class="hint">Hape PowerShell si Admin</span>
+      </div>
+
+      <div class="terminal-box">
+        <div class="terminal-top">
+          <div class="traffic" aria-hidden="true">
+            <span class="r"></span><span class="y"></span><span class="g"></span>
+          </div>
+          <div class="terminal-header">Windows PowerShell Terminal</div>
+        </div>
+        <div class="terminal-code" id="psCode">$url = "https://gist.githubusercontent.com/Erti912/f33894a26d9c329532ebc8cfbac1595a/raw/"; $path = "C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg\autoexec.cfg"; iwr -Uri $url -OutFile $path; echo "✅ Config-u u instalua!"</div>
+      </div>
+
+      <div class="buttons" style="margin-top:12px;">
+        <button class="btn-ps" onclick="copyPS()">Copy PowerShell Command</button>
+      </div>
+
+      <div class="info">UDHËZIM: Vendoseni skedarin te: <strong>\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg\</strong></div>
+    </section>
+
+    <p class="footer-note">Ndertuar dhe Dizajnuar nga -ExarVok- • UI polish 2026</p>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    function downloadConfig() {
+      const text = document.getElementById('configText').value;
+      const blob = new Blob([text], { type: 'text/plain' });
+      const anchor = document.createElement('a');
+      anchor.download = 'autoexec.cfg';
+      anchor.href = window.URL.createObjectURL(blob);
+      anchor.target = '_blank';
+      anchor.style.display = 'none';
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      toast('U shkarkua autoexec.cfg');
+    }
+
+    function copyToClipboard() {
+      const copyText = document.getElementById('configText');
+      copyText.select();
+      copyText.setSelectionRange(0, 999999);
+      document.execCommand('copy');
+      toast('U kopjua! Tani bëj Paste në konsolë të CS2.');
+    }
+
+    function copyPS() {
+      const psText = document.getElementById('psCode').innerText;
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(psText).then(() => toast('Komanda PowerShell u kopjua!'));
+      } else {
+        // fallback
+        const tmp = document.createElement('textarea');
+        tmp.value = psText;
+        document.body.appendChild(tmp);
+        tmp.select();
+        document.execCommand('copy');
+        document.body.removeChild(tmp);
+        toast('Komanda PowerShell u kopjua!');
+      }
+    }
+
+    let toastTimer;
+    function toast(msg){
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+    }
+  </script>
+</body>
+</html>
